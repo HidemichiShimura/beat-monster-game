@@ -1,28 +1,36 @@
 import java.util.Scanner;
+import GameCharacter.Character;
+import GameCharacter.Monster;
+import Exception.*;
+import Utility.Utility;
 import java.util.Random;
 
 public class App {
+    /**
+     * @param args
+     * @throws Exception
+     */
     public static void main(String[] args) throws Exception {
         final Scanner sc = new Scanner(System.in);
         final Random rand = new Random();
-        String mode;
+        String difficulty;
 
         // Display GAME START
-        displayStartMenu();
+        Utility.displayStartMenu();
         System.out.println();
 
         // Display difficulty options
-        displayDifficulty();
+        Utility.displayDifficulty();
         System.out.println();
 
         // Read difficulty from input
         while (true) {
             try {
-                System.out.print("Difficulty : ");
-                mode = sc.nextLine();
+                System.out.print("DIFFICULTY : ");
+                difficulty = sc.nextLine();
 
                 // Throw SelectDifficultyException if an incorrect mode is entered
-                if (!(mode.equals("easy") || mode.equals("normal") || mode.equals("hard"))) {
+                if (!(difficulty.equals("easy") || difficulty.equals("normal") || difficulty.equals("hard"))) {
                     throw new SelectDifficultyException();
                 }
 
@@ -31,10 +39,11 @@ public class App {
                 System.out.println("Enter a correct difficulty from the options above!");
             }
         }
+        System.out.println();
 
         // Create 2 characters with the selected difficulty mode
         Character you = new Character();
-        Character monster = new Character(mode);
+        Monster monster = new Monster(difficulty);
 
         for (int i = 1;; i++) {
             String yourAction;
@@ -43,7 +52,7 @@ public class App {
             int index;
 
             // Display the turn
-            displayTurn(i);
+            Utility.displayTurn(i);
             System.out.println();
 
             System.out.println("** Your life      : " + you.getLife());
@@ -106,28 +115,9 @@ public class App {
 
         sc.close();
 
-        System.out.println(you.getLife() > monster.getLife() ? "Yea! You WON!" : "Oops... You LOST!");
-    }
-
-    public static void displayStartMenu() {
-        System.out.println("=====================");
-        System.out.println("GAME START");
-        System.out.println("=====================");
-    }
-
-    public static void displayDifficulty() {
-        System.out.println("=====================");
-        System.out.println("Select Difficulty");
         System.out.println();
-        System.out.println("easy");
-        System.out.println("normal");
-        System.out.println("hard");
-        System.out.println("=====================");
-    }
-
-    public static void displayTurn(int turnNum) {
-        System.out.println("=====================");
-        System.out.println("TURN " + turnNum);
-        System.out.println("=====================");
+        System.out.println(you.getLife() > monster.getLife() ? "Yea! You WON!" : "Oops... You LOST!");
+        System.out.println();
+        Utility.displayThankyou();
     }
 }
