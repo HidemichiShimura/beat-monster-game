@@ -45,6 +45,7 @@ public class App {
         Character you = new Character();
         Monster monster = new Monster(difficulty);
 
+        // Play
         for (int i = 1;; i++) {
             String yourAction;
             String monsterAction;
@@ -63,11 +64,13 @@ public class App {
             System.out.println("= Your turn =");
             while (true) {
                 try {
-                    System.out.print("attack or nothing? : ");
+                    Utility.displayAction();
+                    System.out.print("ACTION : ");
                     yourAction = sc.nextLine();
+                    System.out.println();
 
                     // Throw SelectDifficultyException if an incorrect mode is entered
-                    if (!(yourAction.equals("attack") || yourAction.equals("nothing"))) {
+                    if (!(yourAction.equals("attack") || yourAction.equals("item") || yourAction.equals("nothing"))) {
                         throw new CharacterActionException();
                     }
 
@@ -77,12 +80,24 @@ public class App {
                 }
             }
 
-            if (yourAction.equals("attack")) {
-                damage = rand.nextInt(50);
-                you.attack(monster, damage);
-                System.out.println("You attacked Monster by " + damage);
-            } else {
-                System.out.println("You did nothing at this turn");
+            switch (yourAction) {
+                case "attack":
+                    damage = rand.nextInt(50);
+                    you.attack(monster, damage);
+                    System.out.println("You attacked Monster by " + damage);
+                    break;
+                case "item":
+                    if (you.getItemsSize() == 0) {
+                        System.out.println("You have already used up all of your potions!");
+                    } else {
+                        you.removeItem();
+                        you.addLife();
+                        System.out.println("You used one of your potions and restored your life by 50!");
+                    }
+                    break;
+                case "nothing":
+                    System.out.println("You did nothing at this turn");
+                    break;
             }
 
             if (monster.getLife() <= 0) {
